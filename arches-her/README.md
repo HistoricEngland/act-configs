@@ -10,4 +10,7 @@ Refer to the main README for instructions on how to use these configurations wit
 
 > Where non-standard or additional information is useful for the developer, they will be nboted below.
 
-1. The entrypint script for arches-her has been modified to run the load_package command as part of the database setup process that runs when first using `act up`, leading to a longer than usual start time-to-first-use.
+1. The entrypoint script for arches-her has been modified to run the load_package command as part of the database setup process that runs when first using `act up`, leading to a longer than usual start time-to-first-use.
+2. To avoid conflicts with other Arches Container Tool configurations, the following changes to the docker-compose files have been applied:
+   - volumes have been suffixed with `-afher11`
+   - image name has been suffixed with `_11` so it is now `he/arches_her:dev_build_1.1`.
