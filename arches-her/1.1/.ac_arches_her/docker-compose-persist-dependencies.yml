@@ -55,8 +55,8 @@ services:
       image: rabbitmq:3.8-management
       hostname: my-rabbit
       volumes:
-        - rabbitmq-data:/var/lib/rabbitmq/mnesia/rabbit@my-rabbit
-        - rabbitmq-logs:/var/log/rabbitmq/log
+        - rabbitmq-data-afher11:/var/lib/rabbitmq/mnesia/rabbit@my-rabbit
+        - rabbitmq-logs-afher11:/var/log/rabbitmq/log
       ports:
         - 5673:5672
         - 15673:15672
@@ -98,5 +98,5 @@ networks:
     driver: bridge
 
 volumes:
-    rabbitmq-logs:
-    rabbitmq-data:
+    rabbitmq-logs-afher11:
+    rabbitmq-data-afher11:
