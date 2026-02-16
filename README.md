@@ -17,7 +17,7 @@ To use these configurations, clone this repository to your local workspace so th
 
 ### Importing configurations into your workspace
 
-Once you have installed the Arches Container Tool into your workspace, you can import the configurations from this repository into your workspace using the `act import` command. For example, to import the Arches HER 1.1 configuration, you would run the following command from your workspace:
+Once you have installed the Arches Container Tool, you can import the configurations from this repository into your workspace directory using the `act import` command. For example, to import the Arches HER 1.1 configuration, you would run the following command from your workspace root:
 
 ```sh
 act import -p arches_her -r ./act-configs/arches-her/1.1
@@ -37,6 +37,37 @@ If you are creating a configuration for a new version of the target application,
 
 ```sh
 act export -p arches_her -r ./act-configs/arches-her/1.2
+```
+
+### Example usage
+
+Here is an example of setting up a work space with the Arches HER 1.1 configuration:
+
+```sh
+# Create a new workspace directory and navigate into it
+mkdir my-arches-her-workspace
+cd my-arches-her-workspace
+
+# Create a virtual environment for your workspace
+python -m venv venv
+source ./venv/bin/activate
+
+# Install the Arches Container Tool in your workspace
+pip install arches-containers
+
+# Clone this repository to your local workspace so that the configurations are available to Arches Container Tool
+git clone https://github.com/HistoricEngland/act-configs.git
+
+# Clone the Arches HER repository to your local workspace
+git clone https://github.com/HistoricEngland/arches-her.git arches_her
+
+# Import the Arches HER 1.1 configuration into your workspace
+act import -p arches_her -r ./act-configs/arches-her/1.1
+
+# Intialize the Arches Container Tool configuration and start the containers for the Arches HER development environment
+act init
+act up
+
 ```
 
 ## Contributing
