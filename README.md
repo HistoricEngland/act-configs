@@ -61,7 +61,7 @@ git clone https://github.com/HistoricEngland/act-configs.git
 # Clone the Arches HER repository to your local workspace
 git clone https://github.com/HistoricEngland/arches-her.git arches_her
 # Checkout the relevant branch for the version of Arches HER you want to use
-git checkout dev/1.1.x
+cd arches_her && git checkout dev/1.1.x && cd ..
 
 # Import the Arches HER 1.1 configuration into your workspace
 act import -p arches_her -r ./act-configs/arches-her/1.1
