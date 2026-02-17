@@ -6,6 +6,16 @@ This repository contains configurations for the Arches Container Tool to create 
 
 Refer to the main README for instructions on how to use these configurations with the Arches Container Tool. The main README also contains information on how to contribute to this repository if you would like to add new configurations or update existing ones.
 
+### Importing configurations into your workspace
+
+The project name for the Arches HER configurations is `arches_her`. To import a configuration for a specific version of Arches HER, use the following command from your workspace root, replacing `<version number>` with the relevant version (e.g. `1.1`):
+
+```sh
+act import -p arches_her -r ./act-configs/arches-her/<version number>
+```
+
+Make sure that you have checked out the relevant branch of the Arches HER repository in your workspace that corresponds to the version of the configuration you are importing, as this will ensure compatibility between the configuration and the application code.
+
 ## Additional information
 
 > Where non-standard or additional information is useful for the developer, they will be nboted below.
