@@ -76,6 +76,8 @@ act up
 
 If you would like to contribute to this repository, please fork the repository and create a pull request with your changes. We welcome contributions of all kinds, including new configurations, updates to existing configurations, and improvements to the documentation.
 
+For detailed contribution guidelines, including how to set up your development environment, test your changes, and submit pull requests, please see [CONTRIBUTING.md](CONTRIBUTING.md).
+
 When contributing new or updated configurations, please ensure that they are well-documented and tested. This will help other developers understand how to use the configurations and ensure that they work as expected.
 
 ## License
