@@ -7,9 +7,9 @@ services:
         args:
           - "PROJ_NAME=arches_lingo"
           - "PROJ_REPO_NAME=arches-lingo"
-          - "DOCKER_PATH=.//.ac_arches_lingo/docker"
+          - "DOCKER_PATH=./1.0/.ac_arches_lingo/docker"
         context: ../..
-        dockerfile: .//.ac_arches_lingo/Dockerfile
+        dockerfile: ./1.0/.ac_arches_lingo/Dockerfile
         target: base
       command: create_project
       volumes:
