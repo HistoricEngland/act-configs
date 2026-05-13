@@ -1,0 +1,23 @@
+
+services:
+    arches-lingo-ed22d:
+      container_name: arches-lingo-ed22d
+      image: he/arches_lingo-ed22d:base
+      build:
+        args:
+          - "PROJ_NAME=arches_lingo"
+          - "PROJ_REPO_NAME=arches-lingo"
+          - "DOCKER_PATH=./1.0/.ac_arches_lingo/docker"
+        context: ../..
+        dockerfile: ./1.0/.ac_arches_lingo/Dockerfile
+        target: base
+      command: create_project
+      volumes:
+        - ../..:/web_root
+      env_file:
+        - ./docker/env_file.env
+      ports:
+        - 8002:8000
+        - 5678:5678
+      stdin_open: true
+      tty: true

@@ -1,0 +1,70 @@
+
+services:
+    arches-lingo-ed22d:
+      container_name: arches-lingo-ed22d
+      image: he/arches_lingo-ed22d:dev_build
+      build:
+        args:
+          - "PROJ_NAME=arches_lingo"
+          - "PROJ_REPO_NAME=arches-lingo"
+          - "DOCKER_PATH=./1.0/.ac_arches_lingo/docker"
+        context: ../..
+        dockerfile: ./1.0/.ac_arches_lingo/Dockerfile
+        target: dev
+      command: run_arches
+      volumes:
+        - ../../arches:/web_root/arches
+        - ../../arches-lingo:/web_root/arches_lingo
+        - ./docker:/web_root/docker
+        - ../../arches-lingo-package:/web_root/arches_lingo_package
+        - ../../arches-lingo-data:/web_root/arches_lingo_data
+      env_file:
+        - ./docker/env_file.env
+      ports:
+        - 8002:8000
+        - 5678:5678
+      stdin_open: true
+      tty: true
+    
+    arches-lingo-ed22d-livereload:
+      profiles:
+        - livereload
+      container_name: arches-lingo-ed22d-livereload
+      image: he/arches_lingo-ed22d:dev_build
+      command: run_livereload
+      volumes:
+        - ../../arches:/web_root/arches
+        - ../../arches-lingo:/web_root/arches_lingo
+      env_file:
+        - ./docker/env_file.env
+      ports:
+        - 35729:35729      
+      depends_on:
+          - arches-lingo-ed22d
+      stdin_open: true
+      tty: true
+    
+    arches-lingo-ed22d-webpack:
+      container_name: arches-lingo-ed22d-webpack
+      image: he/arches_lingo-ed22d:dev_build
+      command: run_webpack
+      volumes:
+        - ../../arches:/web_root/arches
+        - ../../arches-lingo:/web_root/arches_lingo
+      env_file:
+        - ./docker/env_file.env
+      ports:
+        - 8028:8021
+      depends_on:
+          - arches-lingo-ed22d
+      stdin_open: true
+      tty: true
+
+networks:
+  default:
+    external: true
+    name: arches-lingo-ed22d-network
+
+volumes:
+    arches-log-ed22d:
+    arches-static-ed22d:
