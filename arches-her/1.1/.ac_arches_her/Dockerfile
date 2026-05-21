@@ -1,13 +1,15 @@
-FROM python:3.11.8
+FROM python:3.11.8 AS base
 USER root
 
 ## Build Args
 ARG PROJ_NAME=project
+ARG PROJ_REPO_NAME=arches-her
 ARG ARCHES_PATH=./arches
 ARG DOCKER_PATH=./docker
 
 ## Setting default environment variables
 ENV ARCHES_PROJECT=$PROJ_NAME
+ENV ARCHES_PROJECT_REPO_DIRECTORY=$PROJ_REPO_NAME
 ENV WEB_ROOT=/web_root
 ENV APP_ROOT=${WEB_ROOT}/${ARCHES_PROJECT}
 ENV PKG_ROOT=${APP_ROOT}_package
@@ -16,7 +18,7 @@ ENV DATA_ROOT=${APP_ROOT}_data
 ENV ARCHES_ROOT=${WEB_ROOT}/arches
 ENV WHEELS=/wheels
 ENV PYTHONUNBUFFERED=1
-ENV NODE_VERSION=20.14.0
+ENV NODE_VERSION 20.14.0
 
 RUN apt-get update && apt-get install -y make software-properties-common
 
@@ -49,7 +51,7 @@ RUN set -ex \
 
 
 # nvm environment variables
-ENV NVM_DIR=/usr/local/nvm
+ENV NVM_DIR /usr/local/nvm
 RUN mkdir $NVM_DIR
 
 
@@ -65,8 +67,8 @@ RUN echo "source $NVM_DIR/nvm.sh \
     && nvm use default" | bash -
 
 # add node and npm to path so the commands are available
-ENV NODE_PATH=$NVM_DIR/versions/node/v$NODE_VERSION/lib/node_modules
-ENV PATH=$NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
+ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
+ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 
 RUN apt install wait-for-it
 
@@ -77,20 +79,12 @@ RUN rm -rf /root/.cache/pip/*
 COPY $ARCHES_PATH ${ARCHES_ROOT}
 RUN chmod +x ${ARCHES_ROOT}/arches/install/arches_admin.py
 
-RUN pip install --upgrade pip setuptools wheel
-
-COPY ./${ARCHES_PROJECT} ${APP_ROOT}
-
-WORKDIR ${APP_ROOT}
-RUN pip install -e '.[dev]'
-
 # From here, run commands from ARCHES_ROOT
 WORKDIR ${ARCHES_ROOT}
 
+RUN pip install --upgrade pip setuptools wheel
 RUN pip install -e '.[dev]'
 RUN pre-commit install
-
-
 
 COPY $DOCKER_PATH/entrypoint.sh /entrypoint.sh
 RUN chmod -R 700 /entrypoint.sh && \
@@ -115,3 +109,18 @@ CMD ["run_arches"]
 
 # Expose port 8000
 EXPOSE 8000
+
+# Dev stage: extends base and installs the Arches project package.
+# This stage is used by docker-compose.yml for the dev server.
+# Requires the project directory to exist on disk (i.e. act init must have been run first).
+FROM base AS dev
+
+# Re-declare build args — ARGs do not persist across stages
+ARG PROJ_NAME=project
+ARG PROJ_REPO_NAME=arches-her
+
+# Copy the project source from the build context (workspace root)
+COPY ${PROJ_REPO_NAME}/ ${WEB_ROOT}/${PROJ_NAME}/
+
+# Install the project as an editable package so Django can import it
+RUN pip install -e ${WEB_ROOT}/${PROJ_NAME}

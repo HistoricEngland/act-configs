@@ -1,14 +1,16 @@
 
 services:
-    archesher:
-      container_name: archesher
-      image: he/arches_her:dev_build_1.1
+    arches-her-c0d8d:
+      container_name: arches-her-c0d8d
+      image: he/arches_her-c0d8d:base
       build:
         args:
           - "PROJ_NAME=arches_her"
-          - "DOCKER_PATH=./arches_her/.ac_arches_her/docker"
+          - "PROJ_REPO_NAME=arches-her"
+          - "DOCKER_PATH=./1.1/.ac_arches_her/docker"
         context: ../..
-        dockerfile: ./arches_her/.ac_arches_her/Dockerfile
+        dockerfile: ./1.1/.ac_arches_her/Dockerfile
+        target: base
       command: create_project
       volumes:
         - ../..:/web_root

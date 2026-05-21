@@ -1,7 +1,9 @@
 {
     "project_name": "arches_her",
-    "project_name_url_safe": "archesher",
+    "project_name_url_safe": "arches-her",
+    "project_repo_directory": "arches-her",
+    "project_hash": "c0d8d",
     "arches_version": "7.6",
     "arches_repo_organization": "archesproject",
-    "arches_repo_branch": "dev/7.6.x"
+    "arches_repo_branch": "stable/7.6.22"
 }
