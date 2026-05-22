@@ -1,21 +1,23 @@
 
 services:
-    archesher:
-      container_name: archesher
-      image: he/arches_her:dev_build_1.1
+    arches-her-c0d8d:
+      container_name: arches-her-c0d8d
+      image: he/arches_her-c0d8d:dev_build
       build:
         args:
           - "PROJ_NAME=arches_her"
-          - "DOCKER_PATH=./arches_her/.ac_arches_her/docker"
+          - "PROJ_REPO_NAME=arches-her"
+          - "DOCKER_PATH=./1.1/.ac_arches_her/docker"
         context: ../..
-        dockerfile: ./arches_her/.ac_arches_her/Dockerfile
+        dockerfile: ./1.1/.ac_arches_her/Dockerfile
+        target: dev
       command: run_arches
       volumes:
         - ../../arches:/web_root/arches
-        - ../../arches_her:/web_root/arches_her
+        - ../../arches-her:/web_root/arches_her
         - ./docker:/web_root/docker
-        - ../../arches_her-package:/web_root/arches_her_package
-        - ../../arches_her-data:/web_root/arches_her_data
+        - ../../arches-her-package:/web_root/arches_her_package
+        - ../../arches-her-data:/web_root/arches_her_data
       env_file:
         - ./docker/env_file.env
       ports:
@@ -25,66 +27,66 @@ services:
       tty: true
     
     ## - possible 
-    #archesher-bash:
+    #arches-her-bash:
     #  profiles:
     #    - livereload
-    #  container_name: archesher-bash
+    #  container_name: arches-her-bash
     #  image: he/arches_her:dev_build
     #  command: ["bash"]
     #  volumes:
     #    - ../../arches:/web_root/arches
-    #    - ../../arches_her:/web_root/arches_her
+    #    - ../../arches-her:/web_root/arches_her
     #    - ./docker:/web_root/docker
-    #    - ../../arches_her-package:/web_root/arches_her_package
-    #    - ../../arches_her-data:/web_root/arches_her_data
+    #    - ../../arches-her-package:/web_root/arches_her_package
+    #    - ../../arches-her-data:/web_root/arches_her_data
     #  env_file:
     #    - ./docker/env_file.env
     #  ports:
     #    - 35729:35729      
     #  depends_on:
-    #      - archesher
+    #      - arches-her-c0d8d
     #  stdin_open: true
     #  tty: true
 
-    archesher-livereload:
+    arches-her-c0d8d-livereload:
       profiles:
         - livereload
-      container_name: archesher-livereload
-      image: he/arches_her:dev_build_1.1
+      container_name: arches-her-c0d8d-livereload
+      image: he/arches_her-c0d8d:dev_build
       command: run_livereload
       volumes:
         - ../../arches:/web_root/arches
-        - ../../arches_her:/web_root/arches_her
+        - ../../arches-her:/web_root/arches_her
       env_file:
         - ./docker/env_file.env
       ports:
         - 35729:35729      
       depends_on:
-          - archesher
+          - arches-her-c0d8d
       stdin_open: true
       tty: true
     
-    archesher-webpack:
-      container_name: archesher-webpack
-      image: he/arches_her:dev_build_1.1
+    arches-her-c0d8d-webpack:
+      container_name: arches-her-c0d8d-webpack
+      image: he/arches_her-c0d8d:dev_build
       command: run_webpack
       volumes:
         - ../../arches:/web_root/arches
-        - ../../arches_her:/web_root/arches_her
+        - ../../arches-her:/web_root/arches_her
       env_file:
         - ./docker/env_file.env
       ports:
         - 8028:8021
       depends_on:
-          - archesher
+          - arches-her-c0d8d
       stdin_open: true
       tty: true
 
 networks:
   default:
     external: true
-    name: archesher-network
+    name: arches-her-c0d8d-network
 
 volumes:
-    arches-log:
-    arches-static:
+    arches-log-c0d8d:
+    arches-static-c0d8d:

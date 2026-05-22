@@ -1,0 +1,70 @@
+
+services:
+    arches-search-529cd:
+      container_name: arches-search-529cd
+      image: he/arches_search-529cd:dev_build
+      build:
+        args:
+          - "PROJ_NAME=arches_search"
+          - "PROJ_REPO_NAME=arches-search"
+          - "DOCKER_PATH=./1.0/.ac_arches_search/docker"
+        context: ../..
+        dockerfile: ./1.0/.ac_arches_search/Dockerfile
+        target: dev
+      command: run_arches
+      volumes:
+        - ../../arches:/web_root/arches
+        - ../../arches-search:/web_root/arches_search
+        - ./docker:/web_root/docker
+        - ../../arches-search-package:/web_root/arches_search_package
+        - ../../arches-search-data:/web_root/arches_search_data
+      env_file:
+        - ./docker/env_file.env
+      ports:
+        - 8002:8000
+        - 5678:5678
+      stdin_open: true
+      tty: true
+    
+    arches-search-529cd-livereload:
+      profiles:
+        - livereload
+      container_name: arches-search-529cd-livereload
+      image: he/arches_search-529cd:dev_build
+      command: run_livereload
+      volumes:
+        - ../../arches:/web_root/arches
+        - ../../arches-search:/web_root/arches_search
+      env_file:
+        - ./docker/env_file.env
+      ports:
+        - 35729:35729      
+      depends_on:
+          - arches-search-529cd
+      stdin_open: true
+      tty: true
+    
+    arches-search-529cd-webpack:
+      container_name: arches-search-529cd-webpack
+      image: he/arches_search-529cd:dev_build
+      command: run_webpack
+      volumes:
+        - ../../arches:/web_root/arches
+        - ../../arches-search:/web_root/arches_search
+      env_file:
+        - ./docker/env_file.env
+      ports:
+        - 8028:8021
+      depends_on:
+          - arches-search-529cd
+      stdin_open: true
+      tty: true
+
+networks:
+  default:
+    external: true
+    name: arches-search-529cd-network
+
+volumes:
+    arches-log-529cd:
+    arches-static-529cd:

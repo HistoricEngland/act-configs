@@ -1,0 +1,23 @@
+
+services:
+    arches-search-529cd:
+      container_name: arches-search-529cd
+      image: he/arches_search-529cd:base
+      build:
+        args:
+          - "PROJ_NAME=arches_search"
+          - "PROJ_REPO_NAME=arches-search"
+          - "DOCKER_PATH=./1.0/.ac_arches_search/docker"
+        context: ../..
+        dockerfile: ./1.0/.ac_arches_search/Dockerfile
+        target: base
+      command: create_project
+      volumes:
+        - ../..:/web_root
+      env_file:
+        - ./docker/env_file.env
+      ports:
+        - 8002:8000
+        - 5678:5678
+      stdin_open: true
+      tty: true

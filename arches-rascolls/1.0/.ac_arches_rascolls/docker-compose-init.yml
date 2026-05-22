@@ -1,0 +1,23 @@
+
+services:
+    arches-rascolls-1e5cb:
+      container_name: arches-rascolls-1e5cb
+      image: he/arches_rascolls-1e5cb:base
+      build:
+        args:
+          - "PROJ_NAME=arches_rascolls"
+          - "PROJ_REPO_NAME=arches-rascolls"
+          - "DOCKER_PATH=./1.0/.ac_arches_rascolls/docker"
+        context: ../..
+        dockerfile: ./1.0/.ac_arches_rascolls/Dockerfile
+        target: base
+      command: create_project
+      volumes:
+        - ../..:/web_root
+      env_file:
+        - ./docker/env_file.env
+      ports:
+        - 8002:8000
+        - 5678:5678
+      stdin_open: true
+      tty: true

@@ -1,0 +1,70 @@
+
+services:
+    arches-rascolls-1e5cb:
+      container_name: arches-rascolls-1e5cb
+      image: he/arches_rascolls-1e5cb:dev_build
+      build:
+        args:
+          - "PROJ_NAME=arches_rascolls"
+          - "PROJ_REPO_NAME=arches-rascolls"
+          - "DOCKER_PATH=./1.0/.ac_arches_rascolls/docker"
+        context: ../..
+        dockerfile: ./1.0/.ac_arches_rascolls/Dockerfile
+        target: dev
+      command: run_arches
+      volumes:
+        - ../../arches:/web_root/arches
+        - ../../arches-rascolls:/web_root/arches_rascolls
+        - ./docker:/web_root/docker
+        - ../../arches-rascolls-package:/web_root/arches_rascolls_package
+        - ../../arches-rascolls-data:/web_root/arches_rascolls_data
+      env_file:
+        - ./docker/env_file.env
+      ports:
+        - 8002:8000
+        - 5678:5678
+      stdin_open: true
+      tty: true
+    
+    arches-rascolls-1e5cb-livereload:
+      profiles:
+        - livereload
+      container_name: arches-rascolls-1e5cb-livereload
+      image: he/arches_rascolls-1e5cb:dev_build
+      command: run_livereload
+      volumes:
+        - ../../arches:/web_root/arches
+        - ../../arches-rascolls:/web_root/arches_rascolls
+      env_file:
+        - ./docker/env_file.env
+      ports:
+        - 35729:35729      
+      depends_on:
+          - arches-rascolls-1e5cb
+      stdin_open: true
+      tty: true
+    
+    arches-rascolls-1e5cb-webpack:
+      container_name: arches-rascolls-1e5cb-webpack
+      image: he/arches_rascolls-1e5cb:dev_build
+      command: run_webpack
+      volumes:
+        - ../../arches:/web_root/arches
+        - ../../arches-rascolls:/web_root/arches_rascolls
+      env_file:
+        - ./docker/env_file.env
+      ports:
+        - 8028:8021
+      depends_on:
+          - arches-rascolls-1e5cb
+      stdin_open: true
+      tty: true
+
+networks:
+  default:
+    external: true
+    name: arches-rascolls-1e5cb-network
+
+volumes:
+    arches-log-1e5cb:
+    arches-static-1e5cb:

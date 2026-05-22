@@ -1,0 +1,102 @@
+
+services:
+    nginx-arches-search-529cd:
+      container_name: nginx-arches-search-529cd
+      image: nginx:latest
+      ports:
+        - "8080:80"
+      volumes:
+        - ./docker/nginx-config/default.conf:/etc/nginx/conf.d/default.conf
+      networks:
+        - arches-search-529cd-network
+
+    db-arches-search-529cd:
+      container_name: db-arches-search-529cd
+      image: postgis/postgis:16-3.5
+      volumes:
+        - ../../arches_search-postgres-data:/var/lib/postgresql/data
+        - ../../arches_search-postgres-log:/var/log/postgresql
+        - ./docker/init-unix.sql:/docker-entrypoint-initdb.d/init.sql # to set up the DB template
+      ports:
+        - '5433:5432'
+      env_file: 
+        - ./docker/env_file.env
+      networks:
+        - arches-search-529cd-network
+
+    elastic-bindmount-init-arches-search-529cd:
+      image: alpine
+      container_name: elastic-bindmount-init-arches-search-529cd
+      restart: "no"
+      entrypoint: |
+        /bin/sh -c "chown 1000:1000 /esBindMount"
+      volumes:
+        - ../../arches_search-elasticsearch-data:/esBindMount
+
+
+    elasticsearch-arches-search-529cd:
+      container_name: elasticsearch-arches-search-529cd
+      image: docker.elastic.co/elasticsearch/elasticsearch:8.19.4
+      #platform: linux/arm64
+      volumes:
+        - ../../arches_search-elasticsearch-data:/usr/share/elasticsearch/data
+      ports:
+        - "9201:9200"
+        - "9301:9300"
+      env_file: 
+        - ./docker/env_file.env
+      networks:
+        - arches-search-529cd-network
+      depends_on:
+        - elastic-bindmount-init-arches-search-529cd
+
+    rabbitmq-arches-search-529cd:
+      container_name: rabbitmq-arches-search-529cd
+      image: rabbitmq:4.1-management
+      hostname: my-rabbit
+      volumes:
+        - rabbitmq-data-529cd:/var/lib/rabbitmq/mnesia/rabbit@my-rabbit
+        - rabbitmq-logs-529cd:/var/log/rabbitmq/log
+      ports:
+        - 5673:5672
+        - 15673:15672
+      networks:
+        - arches-search-529cd-network
+
+    #pg-feat-arches-search:
+    #  container_name: pg-feat-arches-search
+    #  image: pramsey/pg_featureserv
+    #  volumes:
+    #    - ../../pg_featureserv_config_arches_search:/config
+    #  environment:
+    #    - DATABASE_URL=postgresql://arches_spatial_views:arches_spatial_views@db-arches-search:5432/arches_search
+    #  ports:
+    #    - 9000:9000
+    #  networks:
+    #    - arches-search-network
+    #  depends_on:
+    #    - db-arches-search
+    
+    #pg-tile-arches-search:
+    #  container_name: pg-tile-arches-search
+    #  image: pramsey/pg_tileserv
+    #  volumes:
+    #    - ../../pg_tileserv_config_arches_search:/config
+    #  environment:
+    #    - DATABASE_URL=postgresql://arches_spatial_views:arches_spatial_views@db-arches-search:5432/arches_search
+    #  ports:
+    #    - 7800:7800
+    #  networks:
+    #    - arches-search-network
+    #  depends_on:
+    #    - db-arches-search
+
+
+networks:
+  arches-search-529cd-network:
+    name: arches-search-529cd-network
+    driver: bridge
+
+volumes:
+    rabbitmq-logs-529cd:
+    rabbitmq-data-529cd:

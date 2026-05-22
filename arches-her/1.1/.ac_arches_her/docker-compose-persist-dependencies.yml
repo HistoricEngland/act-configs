@@ -1,17 +1,17 @@
 
 services:
-    nginx-archesher:
-      container_name: nginx-archesher
+    nginx-arches-her-c0d8d:
+      container_name: nginx-arches-her-c0d8d
       image: nginx:latest
       ports:
         - "8080:80"
       volumes:
         - ./docker/nginx-config/default.conf:/etc/nginx/conf.d/default.conf
       networks:
-        - archesher-network
+        - arches-her-c0d8d-network
 
-    db-archesher:
-      container_name: db-archesher
+    db-arches-her-c0d8d:
+      container_name: db-arches-her-c0d8d
       image: postgis/postgis:14-3.2
       volumes:
         - ../../arches_her-postgres-data:/var/lib/postgresql/data
@@ -22,11 +22,11 @@ services:
       env_file: 
         - ./docker/env_file.env
       networks:
-        - archesher-network
+        - arches-her-c0d8d-network
 
-    elastic-bindmount-init-archesher:
+    elastic-bindmount-init-arches-her-c0d8d:
       image: alpine
-      container_name: elastic-bindmount-init-archesher
+      container_name: elastic-bindmount-init-arches-her-c0d8d
       restart: "no"
       entrypoint: |
         /bin/sh -c "chown 1000:1000 /esBindMount"
@@ -34,8 +34,8 @@ services:
         - ../../arches_her-elasticsearch-data:/esBindMount
 
 
-    elasticsearch-archesher:
-      container_name: elasticsearch-archesher
+    elasticsearch-arches-her-c0d8d:
+      container_name: elasticsearch-arches-her-c0d8d
       image: elasticsearch:8.5.0
       volumes:
         #- ../../elasticsearch_data_arches_her:/usr/share/elasticsearch/data
@@ -46,57 +46,57 @@ services:
       env_file: 
         - ./docker/env_file.env
       networks:
-        - archesher-network
+        - arches-her-c0d8d-network
       depends_on:
-        - elastic-bindmount-init-archesher
+        - elastic-bindmount-init-arches-her-c0d8d
 
-    rabbitmq-archesher:
-      container_name: rabbitmq-archesher
+    rabbitmq-arches-her-c0d8d:
+      container_name: rabbitmq-arches-her-c0d8d
       image: rabbitmq:3.8-management
       hostname: my-rabbit
       volumes:
-        - rabbitmq-data-afher11:/var/lib/rabbitmq/mnesia/rabbit@my-rabbit
-        - rabbitmq-logs-afher11:/var/log/rabbitmq/log
+        - rabbitmq-data-c0d8d:/var/lib/rabbitmq/mnesia/rabbit@my-rabbit
+        - rabbitmq-logs-c0d8d:/var/log/rabbitmq/log
       ports:
         - 5673:5672
         - 15673:15672
       networks:
-        - archesher-network
+        - arches-her-c0d8d-network
 
-    #pg-feat-archesher:
-    #  container_name: pg-feat-archesher
+    #pg-feat-arches-her:
+    #  container_name: pg-feat-arches-her
     #  image: pramsey/pg_featureserv
     #  volumes:
     #    - ../../pg_featureserv_config_arches_her:/config
     #  environment:
-    #    - DATABASE_URL=postgresql://arches_spatial_views:arches_spatial_views@db-archesher:5432/arches_her
+    #    - DATABASE_URL=postgresql://arches_spatial_views:arches_spatial_views@db-arches-her:5432/arches_her
     #  ports:
     #    - 9000:9000
     #  networks:
-    #    - archesher-network
+    #    - arches-her-network
     #  depends_on:
-    #    - db-archesher
+    #    - db-arches-her
     
-    #pg-tile-archesher:
-    #  container_name: pg-tile-archesher
+    #pg-tile-arches-her:
+    #  container_name: pg-tile-arches-her
     #  image: pramsey/pg_tileserv
     #  volumes:
     #    - ../../pg_tileserv_config_arches_her:/config
     #  environment:
-    #    - DATABASE_URL=postgresql://arches_spatial_views:arches_spatial_views@db-archesher:5432/arches_her
+    #    - DATABASE_URL=postgresql://arches_spatial_views:arches_spatial_views@db-arches-her:5432/arches_her
     #  ports:
     #    - 7800:7800
     #  networks:
-    #    - archesher-network
+    #    - arches-her-network
     #  depends_on:
-    #    - db-archesher
+    #    - db-arches-her
 
 
 networks:
-  archesher-network:
-    name: archesher-network
+  arches-her-c0d8d-network:
+    name: arches-her-c0d8d-network
     driver: bridge
 
 volumes:
-    rabbitmq-logs-afher11:
-    rabbitmq-data-afher11:
+    rabbitmq-logs-c0d8d:
+    rabbitmq-data-c0d8d:
