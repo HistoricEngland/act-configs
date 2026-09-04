@@ -59,7 +59,7 @@ pip install arches-containers
 git clone https://github.com/HistoricEngland/act-configs.git
 
 # Clone the Arches HER repository to your local workspace
-git clone https://github.com/HistoricEngland/arches-her.git arches_her
+git clone https://github.com/archesproject/arches-her.git
 # Checkout the relevant branch for the version of Arches HER you want to use
 cd arches_her && git checkout dev/1.1.x && cd ..
 
@@ -67,7 +67,7 @@ cd arches_her && git checkout dev/1.1.x && cd ..
 act import -p arches_her -r ./act-configs/arches-her/1.1
 
 # Intialize the Arches Container Tool configuration and start the containers for the Arches HER development environment
-act init
+act activate
 act up
 
 ```
